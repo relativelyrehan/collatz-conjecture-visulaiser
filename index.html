@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.0/chart.min.js"
+        integrity="sha512-asxKqQghC1oBShyhiBwA+YgotaSYKxGP1rcSYTDrB0U6DxwlJjU59B67U8+5/++uFjcuVM8Hh5cokLjZlhm3Vg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <title>Document</title>
+</head>
+
+<body style="display: grid; place-items: center; min-height: 100vh; font-family: sans-serif; text-align: center;">
+    <div>
+        <h1>Collatz Conjecture Visualiser : 27</h1>
+        <canvas id="myChart" width="1000" height="400"></canvas>
+    </div>
+    <script>
+        let flag = 1;
+        let bouncingTime = 0;
+        let testNumber = 27;
+        let max = 0;
+        const peaks = [];
+        const labels = [];
+
+        while (flag) {
+            if (testNumber % 2 === 0 && testNumber !== 1) {
+                testNumber = testNumber / 2;
+                max = testNumber > max ? testNumber : max;
+                peaks.push(testNumber);
+                labels.push(String(bouncingTime));
+                bouncingTime++;
+                console.log(testNumber);
+            } else if (testNumber % 2 !== 0 && testNumber !== 1) {
+                testNumber = testNumber * 3 + 1;
+                max = testNumber > max ? testNumber : max;
+                peaks.push(testNumber);
+                labels.push(String(bouncingTime));
+                bouncingTime++;
+                console.log(testNumber);
+            } else if (testNumber === 1) {
+                flag = 0;
+                console.log(
+                    `Limit Reached in ${bouncingTime} steps with maximum at ${max}`
+                );
+            }
+        }
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'value',
+                    data: peaks,
+                    borderColor: "#E9A0A0",
+                    borderWidth: 3,
+                }]
+            },
+            options: {
+                elements: {
+                    line: {
+                        tension: 0.3,
+                    }
+                },
+                responsive: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
